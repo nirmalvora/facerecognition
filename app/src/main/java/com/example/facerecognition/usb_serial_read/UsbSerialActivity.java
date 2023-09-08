@@ -206,7 +206,7 @@ public class UsbSerialActivity extends AppCompatActivity  implements SerialInput
         SpannableStringBuilder spn = new SpannableStringBuilder();
         spn.append("receive " + data.length + " bytes\n");
         if(data.length > 0)
-            spn.append(HexDump.dumpHexString(data)).append("\n");
+            spn.append(new String(data)).append("\n");
         Log.e("TAG", "receive: "+spn );
         binding.receiveText.append(spn);
     }
