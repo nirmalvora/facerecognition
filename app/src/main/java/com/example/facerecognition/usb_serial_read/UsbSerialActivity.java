@@ -107,9 +107,6 @@ public class UsbSerialActivity extends AppCompatActivity  implements SerialInput
             mainLooper.post(this::connect);
     }
 
-
-
-
     private void connect() {
         UsbDevice device = null;
         UsbManager usbManager = (UsbManager) this.getSystemService(Context.USB_SERVICE);
