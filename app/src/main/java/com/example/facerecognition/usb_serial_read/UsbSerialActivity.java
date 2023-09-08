@@ -36,7 +36,8 @@ public class UsbSerialActivity extends AppCompatActivity  implements SerialInput
     private enum UsbPermission { Unknown, Requested, Granted, Denied }
 
     private final ArrayList<UsbDeviceModel> listItems = new ArrayList<>();
-    private int deviceId, portNum, baudRate;
+    private int deviceId, portNum;
+    private int  baudRate =115200;
     private boolean withIoManager = true;
     private UsbSerialPort usbSerialPort;
     private static final String INTENT_ACTION_GRANT_USB = "com.example.facerecognition" + ".GRANT_USB";
@@ -139,6 +140,7 @@ public class UsbSerialActivity extends AppCompatActivity  implements SerialInput
             usbManager.requestPermission(driver.getDevice(), usbPermissionIntent);
             return;
         }
+        binding.receiveText.append(usbPermission.toString());
         if(usbConnection == null) {
             if (!usbManager.hasPermission(driver.getDevice()))
                 status("connection failed: permission denied");
