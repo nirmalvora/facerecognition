@@ -2,4 +2,5 @@
     <string name="app_name">facerecognition</string>
     <string name="add_face">Add Face</string>
     <string name="recognize_face">Recognize Face</string>
+    <string name="usb_serial">USB Serial</string>
 </resources>

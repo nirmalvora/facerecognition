@@ -26,6 +26,11 @@
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:text="@string/recognize_face"/>
+       <Button
+           android:id="@+id/usb_serial_data"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="@string/usb_serial"/>
    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

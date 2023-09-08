@@ -10,6 +10,7 @@ import android.view.View;
 import com.example.facerecognition.data_base.SimpleDBHelper;
 import com.example.facerecognition.databinding.ActivityAddFaceBinding;
 import com.example.facerecognition.databinding.ActivityMainBinding;
+import com.example.facerecognition.usb_serial_read.UsbSerialActivity;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -43,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
         });
         binding.recognizeFace.setOnClickListener(v -> {
             Intent i = new Intent(getApplicationContext(), RecognitionActivity.class);
+            startActivity(i);
+        });   binding.usbSerialData.setOnClickListener(v -> {
+            Intent i = new Intent(getApplicationContext(), UsbSerialActivity.class);
             startActivity(i);
         });
 
