@@ -53,6 +53,7 @@ public class UsbSerialActivity extends AppCompatActivity  implements SerialInput
         binding = ActivityUsbSerialBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+        mainLooper = new Handler(Looper.getMainLooper());
         getDevices();
     }
 
@@ -97,7 +98,7 @@ public class UsbSerialActivity extends AppCompatActivity  implements SerialInput
                 }
             }
         };
-        mainLooper = new Handler(Looper.getMainLooper());
+
         this.registerReceiver(broadcastReceiver, new IntentFilter(INTENT_ACTION_GRANT_USB));
 
         if(usbPermission == UsbPermission.Unknown || usbPermission == UsbPermission.Granted)
@@ -177,6 +178,7 @@ public class UsbSerialActivity extends AppCompatActivity  implements SerialInput
         usbSerialPort = null;
     }
     void status(String str) {
+        binding.receiveText.append("Connection Status"+ "status: "+str+'\n' );
         Log.e("Connection Status", "status: "+str+'\n' );
     }
 
@@ -202,5 +204,14 @@ public class UsbSerialActivity extends AppCompatActivity  implements SerialInput
             spn.append(HexDump.dumpHexString(data)).append("\n");
         Log.e("TAG", "receive: "+spn );
         binding.receiveText.append(spn);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.registerReceiver(broadcastReceiver, new IntentFilter(INTENT_ACTION_GRANT_USB));
+
+        if(usbPermission == UsbPermission.Unknown || usbPermission == UsbPermission.Granted)
+            mainLooper.post(this::connect);
     }
 }
