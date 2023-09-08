@@ -204,11 +204,10 @@ public class UsbSerialActivity extends AppCompatActivity  implements SerialInput
 
     private void receive(byte[] data) {
         SpannableStringBuilder spn = new SpannableStringBuilder();
-        spn.append("receive " + data.length + " bytes\n");
-        if(data.length > 0)
+        if(data.length ==32) {
             spn.append(new String(data)).append("\n");
-        Log.e("TAG", "receive: "+spn );
-        binding.receiveText.append(spn);
+            binding.receiveText.append(spn);
+        }
     }
 
     @Override
