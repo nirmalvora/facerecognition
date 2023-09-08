@@ -14,8 +14,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
-
 public class SimpleDBHelper extends SQLiteOpenHelper {
 
 
@@ -60,21 +58,16 @@ public class SimpleDBHelper extends SQLiteOpenHelper {
     }
 
     public void addNewCourse(String name, float[] embeddings) {
-
-        StringBuilder floatArrayStr = new StringBuilder();
-        for (float value : embeddings) {
-            floatArrayStr.append(value).append(",");
-        }
-        floatArrayStr.deleteCharAt(floatArrayStr.length() - 1);
+        String jsonString = convertFloatArrayToString(embeddings) ;
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(NAME_COL, name);
-        values.put(EMBEDDINGS, floatArrayStr.toString());
+        values.put(EMBEDDINGS, jsonString);
         db.insert(TABLE_NAME, null, values);
         db.close();
     }
 
-    public void getData() {
+    public void getData() throws JSONException {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursorCourses
                 = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
@@ -85,10 +78,8 @@ public class SimpleDBHelper extends SQLiteOpenHelper {
                 // cursor to our array list.
                 String name = cursorCourses.getString(1);
                 String embeddings = cursorCourses.getString(2);
-                float[] data;
-                data =  stringToFloat(embeddings);
-                Log.e("GetDataFromDB", "getData: " + name + "  " + embeddings +"  "+ Arrays.toString(data));
-
+                float[] data =convertStringToFloatArray(embeddings);
+                Log.e("GetDataFromDB", "getData: " + name + "  " + embeddings +"  "+data);
             } while (cursorCourses.moveToNext());
             cursorCourses.close();
             db.close();
@@ -102,14 +93,13 @@ public class SimpleDBHelper extends SQLiteOpenHelper {
     }
 
 
-    private float[] stringToFloat(String jsonArray) {
-        String[] floatArrayStrParts = jsonArray.split(",");
-        float[] fData = new float[floatArrayStrParts.length];
 
-        for (int i = 0; i < floatArrayStrParts.length; i++) {
-            fData[i] = Float.parseFloat(floatArrayStrParts[i]);
-        }
-
-        return fData;
+    public String convertFloatArrayToString(float[] floatArray) {
+        Gson gson = new Gson();
+        return gson.toJson(floatArray);
+    }
+    public float[] convertStringToFloatArray(String jsonArrayString) {
+        Gson gson = new Gson();
+        return gson.fromJson(jsonArrayString, float[].class);
     }
 }
