@@ -18,8 +18,11 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.View;
 
 import com.example.facerecognition.R;
+import com.example.facerecognition.databinding.ActivityMainBinding;
+import com.example.facerecognition.databinding.ActivityUsbSerialBinding;
 import com.hoho.android.usbserial.driver.UsbSerialDriver;
 import com.hoho.android.usbserial.driver.UsbSerialPort;
 import com.hoho.android.usbserial.driver.UsbSerialProber;
@@ -42,12 +45,14 @@ public class UsbSerialActivity extends AppCompatActivity  implements SerialInput
     private Handler mainLooper;
     private boolean connected = false;
     private UsbPermission usbPermission = UsbPermission.Unknown;
+    private ActivityUsbSerialBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_usb_serial);
-
+        binding = ActivityUsbSerialBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
         getDevices();
     }
 
@@ -69,7 +74,9 @@ public class UsbSerialActivity extends AppCompatActivity  implements SerialInput
                 listItems.add(new UsbDeviceModel(device, 0, null));
             }
         }
-        connectToDevice(0);
+        if(listItems.size()!=0) {
+            connectToDevice(0);
+        }
     }
 
     private void connectToDevice(int devicePosition) {
@@ -194,5 +201,6 @@ public class UsbSerialActivity extends AppCompatActivity  implements SerialInput
         if(data.length > 0)
             spn.append(HexDump.dumpHexString(data)).append("\n");
         Log.e("TAG", "receive: "+spn );
+        binding.receiveText.append(spn);
     }
 }
