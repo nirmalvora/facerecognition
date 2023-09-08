@@ -33,6 +33,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider
+            android:authorities="com.example.facerecognition"
+            android:name=".data_base.Provider"
+            android:exported="false" />
     </application>
 
 </manifest>

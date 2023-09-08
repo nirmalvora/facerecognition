@@ -3,6 +3,7 @@ package com.example.facerecognition;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -18,6 +19,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.YuvImage;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -37,6 +39,7 @@ import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.core.content.ContextCompat;
 
+import com.example.facerecognition.data_base.Contract;
 import com.example.facerecognition.databinding.ActivityAddFaceBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -68,6 +71,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import com.example.facerecognition.data_base.Contract.TableEntry;
 
 public class AddFaceActivity extends AppCompatActivity {
     private static final int MY_CAMERA_REQUEST_CODE = 100;
@@ -462,6 +466,14 @@ public class AddFaceActivity extends AppCompatActivity {
                 result.setExtra(embeedings);
 
                 registered.put( input.getText().toString(),result);
+                String jsonString = new Gson().toJson(result);
+                ContentValues values = new ContentValues();
+                values.put(TableEntry.COL_USER_NAME,  input.getText().toString());
+                values.put(TableEntry.COL_EMBEDDINGS,jsonString);
+
+                // Insert values into the database.
+                Uri newProdUri = getContentResolver().insert(TableEntry.CONTENT_URI, values);
+                Log.e("NirmalVoraInsertData", "onClick: "+newProdUri );
                 start=true;
                 insertToSP(registered,0); //mode: 0:save all, 1:clear all, 2:update all
 
