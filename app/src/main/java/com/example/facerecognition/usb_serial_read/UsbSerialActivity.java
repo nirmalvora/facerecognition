@@ -95,6 +95,7 @@ public class UsbSerialActivity extends AppCompatActivity  implements SerialInput
                 if(INTENT_ACTION_GRANT_USB.equals(intent.getAction())) {
                     usbPermission = intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)
                             ? UsbPermission.Granted : UsbPermission.Denied;
+                    binding.receiveText.append(usbPermission.toString());
                     connect();
                 }
             }
@@ -135,7 +136,7 @@ public class UsbSerialActivity extends AppCompatActivity  implements SerialInput
         UsbDeviceConnection usbConnection = usbManager.openDevice(driver.getDevice());
         if(usbConnection == null && usbPermission == UsbPermission.Unknown && !usbManager.hasPermission(driver.getDevice())) {
             usbPermission = UsbPermission.Requested;
-            int flags = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_MUTABLE : 0;
+            int flags = PendingIntent.FLAG_MUTABLE;
             PendingIntent usbPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(INTENT_ACTION_GRANT_USB), flags);
             usbManager.requestPermission(driver.getDevice(), usbPermissionIntent);
             return;
@@ -153,6 +154,8 @@ public class UsbSerialActivity extends AppCompatActivity  implements SerialInput
             usbSerialPort.open(usbConnection);
             try{
                 usbSerialPort.setParameters(baudRate, 8, 1, UsbSerialPort.PARITY_NONE);
+                usbSerialPort.setRTS(true);
+                usbSerialPort.setDTR(true);
             }catch (UnsupportedOperationException e){
                 status("unsupport setparameters");
             }
