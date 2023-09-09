@@ -226,4 +226,16 @@ public class UsbSerialActivity extends AppCompatActivity  implements SerialInput
         this.unregisterReceiver(broadcastReceiver);
         super.onPause();
     }
+
+
+    @Override
+    protected void onDestroy() {
+        Toast.makeText(getApplicationContext(), "Disconnected", Toast.LENGTH_SHORT).show();
+        if(connected) {
+            status("disconnected");
+            disconnect();
+        }
+        this.unregisterReceiver(broadcastReceiver);
+        super.onDestroy();
+    }
 }
