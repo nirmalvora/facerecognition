@@ -19,6 +19,7 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.facerecognition.R;
 import com.example.facerecognition.databinding.ActivityMainBinding;
@@ -217,6 +218,7 @@ public class UsbSerialActivity extends AppCompatActivity  implements SerialInput
     }
     @Override
     public void onPause() {
+        Toast.makeText(getApplicationContext(), "Disconnected", Toast.LENGTH_SHORT).show();
         if(connected) {
             status("disconnected");
             disconnect();
