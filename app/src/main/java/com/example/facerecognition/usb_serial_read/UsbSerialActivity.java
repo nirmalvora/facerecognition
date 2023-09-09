@@ -215,4 +215,13 @@ public class UsbSerialActivity extends AppCompatActivity  implements SerialInput
         if(usbPermission == UsbPermission.Unknown || usbPermission == UsbPermission.Granted)
             mainLooper.post(this::connect);
     }
+    @Override
+    public void onPause() {
+        if(connected) {
+            status("disconnected");
+            disconnect();
+        }
+        this.unregisterReceiver(broadcastReceiver);
+        super.onPause();
+    }
 }
